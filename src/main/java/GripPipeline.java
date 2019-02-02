@@ -1,4 +1,4 @@
-package vision.tracking;
+//package vision.tracking;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -40,11 +40,19 @@ public class GripPipeline {
 	public void process(Mat source0) {
 		// Step HSV_Threshold0:
 		Mat hsvThresholdInput = source0;
+		double[] hsvThresholdHue = {0, 100};
+		double[] hsvThresholdSaturation = {0, 255.0};
+		double[] hsvThresholdValue = {128, 255.0};
+		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput); }
+		
+	public void process1 (Mat source0) { 
+		//Step HSV_Threshold0:
+		Mat hsvThresholdInput = source0;
 		double[] hsvThresholdHue = {65, 88};
 		double[] hsvThresholdSaturation = {96, 255.0};
 		double[] hsvThresholdValue = {128, 255.0};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
-		
+
 		// Step Find_Contours0:
 		Mat findContoursInput = hsvThresholdOutput;
 		boolean findContoursExternalOnly = true;
