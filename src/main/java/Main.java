@@ -5,6 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+package vision.tracking;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,8 +27,10 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.vision.VisionPipeline;
 import edu.wpi.first.vision.VisionThread;
-
+/*
 import org.opencv.core.Mat;
+
+import vision.tracking.GripPipeline;
 
 /*
    JSON format:
@@ -240,16 +244,19 @@ public final class Main {
 
     // start image processing on camera 0 if present
     if (cameras.size() >= 1) {
-      VisionThread visionThread = new VisionThread(cameras.get(0),
-              new MyPipeline(), pipeline -> {
-        // do something with pipeline results
-      });
-      /* something like this for GRIP:
+      // VisionThread visionThread = new VisionThread(cameras.get(0),
+      //         new MyPipeline(), pipeline -> {
+      //   // do something with pipeline results
+      // });
+      // /* something like this for GRIP:
       VisionThread visionThread = new VisionThread(cameras.get(0),
               new GripPipeline(), pipeline -> {
-        ...
+                if (!pipeline.filterContoursOutput().isEmpty()) {
+                  Rect r  = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+                  
+                }
       });
-       */
+      
       visionThread.start();
     }
 
