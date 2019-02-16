@@ -1,4 +1,4 @@
-package vision.tracking;
+//package vision.tracking;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,6 +16,9 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.*;
 import org.opencv.objdetect.*;
 
+import edu.wpi.first.vision.VisionPipeline;
+
+
 /**
 * GripPipeline class.
 *
@@ -23,7 +26,7 @@ import org.opencv.objdetect.*;
 *
 * @author GRIP
 */
-public class GripPipeline {
+public class GripPipeline implements VisionPipeline{
 
 	//Outputs
 	private Mat hsvThresholdOutput = new Mat();
@@ -43,15 +46,8 @@ public class GripPipeline {
 		double[] hsvThresholdHue = {0, 100};
 		double[] hsvThresholdSaturation = {0, 255.0};
 		double[] hsvThresholdValue = {128, 255.0};
-		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput); }
+		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput); 
 		
-	public void process1 (Mat source0) { 
-		//Step HSV_Threshold0:
-		Mat hsvThresholdInput = source0;
-		double[] hsvThresholdHue = {65, 88};
-		double[] hsvThresholdSaturation = {96, 255.0};
-		double[] hsvThresholdValue = {128, 255.0};
-		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step Find_Contours0:
 		Mat findContoursInput = hsvThresholdOutput;
@@ -137,7 +133,6 @@ public class GripPipeline {
 		int method = Imgproc.CHAIN_APPROX_SIMPLE;
 		Imgproc.findContours(input, contours, hierarchy, mode, method);
 	}
-
 
 	/**
 	 * Filters out contours that do not meet certain criteria.

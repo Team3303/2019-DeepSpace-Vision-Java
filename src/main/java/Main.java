@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package vision.tracking;
+//package vision.tracking;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,13 +20,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+
+
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTable;  
+import edu.wpi.first.networktables.NetworkTableEntry;  
 import edu.wpi.first.vision.VisionPipeline;
 import edu.wpi.first.vision.VisionThread;
+import org.opencv.core.Rect;
+import org.opencv.imgproc.*;
+
 /*
 import org.opencv.core.Mat;
 
@@ -201,17 +208,17 @@ public final class Main {
     return camera;
   }
 
-  /**
+  /**.....
    * Example pipeline.
    */
-  public static class MyPipeline implements VisionPipeline {
-    public int val;
-
-    @Override
-    public void process(Mat mat) {
-      val += 1;
-    }
-  }
+  //public static class MyPipeline implements VisionPipeline {
+  //  public int val;
+  //
+  //   @Override
+  //   public void process(Mat mat) {
+  //     val += 1;
+  //   }
+  // }
 
   /**
    * Main.
@@ -235,13 +242,18 @@ public final class Main {
       System.out.println("Setting up NetworkTables client for team " + team);
       ntinst.startClientTeam(team);
     }
-
+    
+    NetworkTable table = ntinst.getTable("Datatable");
+    NetworkTableEntry xEntry = table.getEntry("x");
+    NetworkTableEntry yEntry = table.getEntry("y");
+    NetworkTableEntry size = table.getEntry("size");
+    
     // start cameras
     List<VideoSource> cameras = new ArrayList<>();
     for (CameraConfig cameraConfig : cameraConfigs) {
       cameras.add(startCamera(cameraConfig));
     }
-
+    
     // start image processing on camera 0 if present
     if (cameras.size() >= 1) {
       // VisionThread visionThread = new VisionThread(cameras.get(0),
@@ -249,16 +261,22 @@ public final class Main {
       //   // do something with pipeline results
       // });
       // /* something like this for GRIP:
-      VisionThread visionThread = new VisionThread(cameras.get(0),
-              new GripPipeline(), pipeline -> {
+      VisionThread  visionThread = new VisionThread(cameras.get(0),
+              new GripPipeline(),  pipeline -> {
+                xEntry .setDouble(5);
+                yEntry .setDouble(6);
+                int test = pipeline.filterContoursOutput().size();
+                size.setDouble(test); 
                 if (!pipeline.filterContoursOutput().isEmpty()) {
                   Rect r  = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-                  
+                  xEntry .setDouble(r.x);
+                  yEntry .setDouble(r.y);
+              
                 }
       });
       
-      visionThread.start();
-    }
+       visionThread.start();
+     }
 
     // loop forever
     for (;;) {
@@ -269,4 +287,4 @@ public final class Main {
       }
     }
   }
-}
+  }
