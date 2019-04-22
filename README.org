@@ -1,3 +1,6 @@
+* Note:
+This repository is unused and the code is incomplete. We highly discourage using the code in this repository as a reference for your own project.
+
 * FRC Team 3303's Vision-Tracking Java Code for 2019: DeepSpace
 This is our repository for Vision Tracking, which we upload to our Raspberry Pi's. It looks like the default template is setup for the Eclipse IDE, but any other IDE is fine. To build the project, just run the following:
 #+begin_src
